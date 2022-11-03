@@ -2,15 +2,13 @@ const limpeza = ["papel", "sabonete", "pasta", "hidratante"];
 const bebidas = ["refrigerante", "suco", "agua", "energetico"];
 const cereais = ["aveia", "sucrilhos", "flocos", "nescalball"];
 
-const marketData = {
+const testMarketData = {
   limpeza,
   bebidas,
   cereais,
 };
 
-const userProducts = ["aveia", "hidratante", "agua"];
-
-const findPath = (listOfProducts) => {
+const findPath = (listOfProducts, marketData) => {
   const path = [];
   const copy = listOfProducts;
 
@@ -28,4 +26,4 @@ const findPath = (listOfProducts) => {
   return path;
 };
 
-console.log(findPath(userProducts));
+module.exports = { findPath, testMarketData };
