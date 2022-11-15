@@ -1,9 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 
+const { PrismaClient } = require("@prisma/client");
+
 const { findPath, testMarketData } = require("./findPath");
 
 const app = express();
+const prisma = new PrismaClient();
 const port = 3000;
 
 app.use(express.json());
@@ -23,4 +26,82 @@ app.get("/find", (req, res) => {
   const path = findPath(userProducts, testMarketData);
 
   return res.send(path);
+});
+
+app.post("/market/create", async (req, res) => {
+  const { name } = req.body;
+  const newMarket = await prisma.market.create({ data: { name } });
+
+  return res.status(201).json(newMarket);
+});
+
+app.post("/category/create", async (req, res) => {
+  const { marketId, name, order } = req.body;
+  const newMarket = await prisma.market.findUniqueOrThrow({
+    where: {
+      id: marketId,
+    },
+  });
+
+  //Validations
+  if (!newMarket)
+    return res.status(404).send({ msg: "Mercado não encontrado!" });
+  if (!name)
+    return res.status(400).send({ msg: "Nome é um campo obrigatório!" });
+  if (!order)
+    return res
+      .status(400)
+      .send({ msg: "Ordem do corredor é um campo obrigatório!" });
+
+  const newCategory = prisma.category.create({
+    data: {
+      name,
+      order,
+      marketId,
+    },
+  });
+
+  return res.status(201).json(newCategory);
+});
+
+app.post("/product/create", async (req, res) => {
+  const { name, categoryId, description } = req.body;
+
+  const newCategory = await prisma.category.findUnique({
+    where: { id: categoryId },
+  });
+
+  const { name: categoryName, icon: categoryIcon } = newCategory;
+
+  const newProduct = await prisma.product.create({
+    data: {
+      name,
+      categoryId,
+      description,
+      categoryName,
+      categoryIcon,
+    },
+  });
+  return res.status(201).json(newProduct);
+});
+
+app.get("/market/read", async (req, res) => {
+  const marketsList = await prisma.market.findMany();
+  return res.status(200).send(marketsList);
+});
+
+app.get("/category/read", async (req, res) => {
+  const { marketId } = req.body;
+  const categoriesList = await prisma.category.findMany({
+    where: { marketId: marketId },
+  });
+  return res.status(200).send(categoriesList);
+});
+
+app.get("/product/read", async (req, res) => {
+  const { categoryId } = req.body;
+  const productsList = await prisma.product.findMany({
+    where: { categoryId: categoryId },
+  });
+  return res.status(200).send(productsList);
 });

@@ -9,8 +9,11 @@
   "author": "Wendel Demétrio",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.6.0",
     "cors": "^2.8.5",
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.2"
   },
   "devDependencies": {
     "prisma": "^4.6.0"
