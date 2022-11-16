@@ -3,7 +3,7 @@ const cors = require("cors");
 
 const { PrismaClient } = require("@prisma/client");
 
-const { findPath, testMarketData } = require("./findPath");
+const { findPath, testMarketData } = require("../findPath");
 
 const app = express();
 const prisma = new PrismaClient();
