@@ -90,18 +90,39 @@ app.get("/market/read", async (req, res) => {
   return res.status(200).send(marketsList);
 });
 
-app.get("/category/read", async (req, res) => {
-  const { marketId } = req.body;
+app.get("/category/:marketId/read", async (req, res) => {
+  const marketId = req.params.marketId;
   const categoriesList = await prisma.category.findMany({
     where: { marketId: marketId },
   });
   return res.status(200).send(categoriesList);
 });
 
-app.get("/product/read", async (req, res) => {
-  const { categoryId } = req.body;
+app.get("/product/:categoryId/read", async (req, res) => {
+  const categoryId = req.params.categoryId;
   const productsList = await prisma.product.findMany({
     where: { categoryId: categoryId },
   });
+  return res.status(200).send(productsList);
+});
+
+app.get("/category/:categoryId/update", async (req, res) => {
+  const categoryId = req.params.categoryId;
+  return res.status(200).send(productsList);
+});
+
+app.get("/product/update", async (req, res) => {
+  return res.status(200).send(productsList);
+});
+
+app.get("/market/delete", async (req, res) => {
+  return res.status(200).send(productsList);
+});
+
+app.get("/category/delete", async (req, res) => {
+  return res.status(200).send(productsList);
+});
+
+app.get("/product/delete", async (req, res) => {
   return res.status(200).send(productsList);
 });
