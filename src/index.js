@@ -6,7 +6,9 @@ const { PrismaClient } = require("@prisma/client");
 const { findPath, testMarketData } = require("../findPath");
 
 const app = express();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ["query"],
+});
 const port = 3333;
 
 app.use(express.json());
@@ -38,15 +40,9 @@ app.post("/market/create", async (req, res) => {
 app.post("/category/:marketId/create", async (req, res) => {
   const marketId = req.params.marketId;
   const { name, order, icon } = req.body;
-  const newMarket = await prisma.market.findUniqueOrThrow({
-    where: {
-      id: marketId,
-    },
-  });
 
   //Validations
-  if (!newMarket)
-    return res.status(404).send({ msg: "Mercado não encontrado!" });
+
   if (!name)
     return res.status(400).send({ msg: "Nome é um campo obrigatório!" });
   if (!order)
@@ -54,7 +50,7 @@ app.post("/category/:marketId/create", async (req, res) => {
       .status(400)
       .send({ msg: "Ordem do corredor é um campo obrigatório!" });
 
-  const newCategory = prisma.category.create({
+  const newCategory = await prisma.category.create({
     data: {
       name,
       order,
