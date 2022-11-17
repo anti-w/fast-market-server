@@ -37,7 +37,7 @@ app.post("/market/create", async (req, res) => {
 
 app.post("/category/:marketId/create", async (req, res) => {
   const marketId = req.params.marketId;
-  const { name, order } = req.body;
+  const { name, order, icon } = req.body;
   const newMarket = await prisma.market.findUniqueOrThrow({
     where: {
       id: marketId,
@@ -59,6 +59,7 @@ app.post("/category/:marketId/create", async (req, res) => {
       name,
       order,
       marketId,
+      icon,
     },
   });
 
