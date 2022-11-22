@@ -62,9 +62,9 @@ app.post("/category/:marketId/create", async (req, res) => {
   return res.status(201).json(newCategory);
 });
 
-app.post("/product/create", async (req, res) => {
-  const { name, categoryId, description } = req.body;
-
+app.post("/product/:categoryId/create", async (req, res) => {
+  const { name, description } = req.body;
+  const categoryId = req.params.categoryId;
   const newCategory = await prisma.category.findUnique({
     where: { id: categoryId },
   });
