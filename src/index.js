@@ -69,7 +69,11 @@ app.post("/product/:categoryId/create", async (req, res) => {
     where: { id: categoryId },
   });
 
-  const { name: categoryName, icon: categoryIcon } = newCategory;
+  const {
+    name: categoryName,
+    icon: categoryIcon,
+    order: categoryOrder,
+  } = newCategory;
 
   const newProduct = await prisma.product.create({
     data: {
@@ -78,6 +82,7 @@ app.post("/product/:categoryId/create", async (req, res) => {
       description,
       categoryName,
       categoryIcon,
+      categoryOrder,
     },
   });
   return res.status(201).json(newProduct);

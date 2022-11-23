@@ -27,11 +27,12 @@ model Category {
 }
 
 model Product {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  Category     Category? @relation(fields: [categoryId], references: [id])
-  categoryId   String?   @db.ObjectId
-  description  String?
-  categoryIcon String?
-  categoryName String
-  name         String
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  Category      Category? @relation(fields: [categoryId], references: [id])
+  categoryId    String?   @db.ObjectId
+  description   String?
+  categoryIcon  String?
+  categoryName  String
+  categoryOrder Int
+  name          String
 }
